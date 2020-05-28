@@ -38,7 +38,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Printf("%v %v %v", m.MediaID, *f, err)
+		//log.Printf("%v %v %v", m.MediaID, *f, err)
 		markdown := "![Screenshot](" + m.MediaID + ")"
 		c.SendRobotMarkdownMessage(os.Getenv("token"), "Screenshot", markdown)
 	} else {
