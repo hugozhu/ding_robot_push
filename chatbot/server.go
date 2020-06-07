@@ -9,12 +9,13 @@ import (
 )
 
 type OutgoingMessage struct {
-	MessageTyep string `json:"msgtype"`
+	MessageType string `json:"msgtype"`
 	Text        struct {
 		Content string `json:"content,omitempty"`
 	} `json:"text,omitempty"`
 	MessageID         string `json:"msgId"`
-	CreatedAt         int64
+	CreatedAt         int64  `json:"createAt"`
+	ConversationID    string `json:"conversationId"`
 	ConversationType  string `json:"conversationType"`
 	ConversationTitle string `json:"conversationTitle"`
 	SenderID          string `json:"senderId"`
@@ -35,9 +36,9 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Println(content)
+		log.Println(string(content))
 		var obj OutgoingMessage
-		json.Unmarshal(content, obj)
+		json.Unmarshal(content, &obj)
 		log.Printf("%v", obj)
 		io.WriteString(w, "Hello, TLS!\n")
 	})
