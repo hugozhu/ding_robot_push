@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+    "os/exec"
+    "bytes"
 )
 
 type OutgoingMessage struct {
@@ -39,8 +41,19 @@ func main() {
 		log.Println(string(content))
 		var obj OutgoingMessage
 		json.Unmarshal(content, &obj)
-		log.Printf("%v", obj)
-		io.WriteString(w, "Hello, TLS!\n")
+        text := obj.Text.Content
+		log.Printf("%s", text)
+        cmd := exec.Command("/bin/sh", "/home/hugo/Projects/ding_robot_push/chatbot/cmd.sh", text)
+        var stderr, stdout bytes.Buffer
+        cmd.Stdout = &stdout
+        cmd.Stderr = &stderr
+        err = cmd.Run()
+        if (err!=nil) {
+            log.Println(err.Error(), stderr.String())
+        } else {
+            log.Println(stdout.String())
+        }
+		io.WriteString(w, "OK")
 	})
 
 	// One can use generate_cert.go in crypto/tls to generate cert.pem and key.pem.
