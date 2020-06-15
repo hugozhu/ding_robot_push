@@ -35,7 +35,7 @@ func main() {
 		json.Unmarshal(content, &obj)
 		text := obj.Text.Content
 		log.Printf("%s", text)
-		cmd := exec.Command("/bin/sh", workDirPath+"/cmd.sh", text)
+		cmd := exec.Command("/bin/bash", workDirPath+"/cmd.sh", text)
 		var stderr, stdout bytes.Buffer
 		cmd.Stdout = &stdout
 		cmd.Stderr = &stderr
