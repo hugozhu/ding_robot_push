@@ -1,13 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
-    "os/exec"
-    "bytes"
+	"os"
+	"os/exec"
 )
 
 type OutgoingMessage struct {
@@ -31,6 +32,16 @@ type OutgoingMessage struct {
 	} `json:"atUsers,omitempty"`
 }
 
+var workDirPath string
+
+func init() {
+	var err error
+	workDirPath, err = os.Getwd()
+	if err != nil {
+		log.Println(err)
+	}
+}
+
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		log.Printf("%v", req)
@@ -41,18 +52,18 @@ func main() {
 		log.Println(string(content))
 		var obj OutgoingMessage
 		json.Unmarshal(content, &obj)
-        text := obj.Text.Content
+		text := obj.Text.Content
 		log.Printf("%s", text)
-        cmd := exec.Command("/bin/sh", "/home/hugo/Projects/ding_robot_push/chatbot/cmd.sh", text)
-        var stderr, stdout bytes.Buffer
-        cmd.Stdout = &stdout
-        cmd.Stderr = &stderr
-        err = cmd.Run()
-        if (err!=nil) {
-            log.Println(err.Error(), stderr.String())
-        } else {
-            log.Println(stdout.String())
-        }
+		cmd := exec.Command("/bin/sh", workDirPath+"/cmd.sh", text)
+		var stderr, stdout bytes.Buffer
+		cmd.Stdout = &stdout
+		cmd.Stderr = &stderr
+		err = cmd.Run()
+		if err != nil {
+			log.Println(err.Error(), stderr.String())
+		} else {
+			log.Println(stdout.String())
+		}
 		io.WriteString(w, "OK")
 	})
 
@@ -64,6 +75,6 @@ func main() {
 	}()
 
 	log.Printf("About to listen on 8443. Go to https://127.0.0.1:8443/")
-	err := http.ListenAndServeTLS(":8443", "cert.pem", "key.pem", nil)
+	err := http.ListenAndServeTLS(":8443", workDirPath+"/cert.pem", workDirPath+"/key.pem", nil)
 	log.Fatal(err)
 }
