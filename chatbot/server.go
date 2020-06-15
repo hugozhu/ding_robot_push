@@ -9,28 +9,9 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-)
 
-type OutgoingMessage struct {
-	MessageType string `json:"msgtype"`
-	Text        struct {
-		Content string `json:"content,omitempty"`
-	} `json:"text,omitempty"`
-	MessageID         string `json:"msgId"`
-	CreatedAt         int64  `json:"createAt"`
-	ConversationID    string `json:"conversationId"`
-	ConversationType  string `json:"conversationType"`
-	ConversationTitle string `json:"conversationTitle"`
-	SenderID          string `json:"senderId"`
-	SenderNick        string `json:"senderNick"`
-	SenderCorpID      string `json:"senderCorpId"`
-	SenderStaffID     string `json:"senderStaffId"`
-	ChatbotUserID     string `json:"chatbotUserId"`
-	AtUsers           []struct {
-		DingTalkID string `json:"dingtalkId,omitempty"`
-		StaffID    string `json:"staffId,omitempty"`
-	} `json:"atUsers,omitempty"`
-}
+	dingtalk "github.com/hugozhu/godingtalk"
+)
 
 var workDirPath string
 
@@ -50,7 +31,7 @@ func main() {
 			log.Fatal(err)
 		}
 		log.Println(string(content))
-		var obj OutgoingMessage
+		var obj dingtalk.RobotOutgoingMessage
 		json.Unmarshal(content, &obj)
 		text := obj.Text.Content
 		log.Printf("%s", text)
