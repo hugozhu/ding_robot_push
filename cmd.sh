@@ -13,7 +13,7 @@ if [[ "$line" == /* ]]; then
         /temp:  显示树莓派CPU温度 
         /sh:    显示市场股价 
         /cny:   显示市场汇率
-        /cam:   获取视像头拍照
+        /cam:   启动取摄像头拍照
 END
 )
        push3.sh "$help"
