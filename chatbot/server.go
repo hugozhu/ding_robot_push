@@ -34,27 +34,29 @@ func main() {
 				text = "/echo " + text
 				exec.Command("/bin/bash", workDirPath+"/cmd.sh", text)
 			}
-		log.Printf("%v", req)
-		content, err := ioutil.ReadAll(req.Body)
-		if err != nil {
-			log.Fatal(err)
-		}
-		log.Println(string(content))
-		var obj dingtalk.RobotOutgoingMessage
-		json.Unmarshal(content, &obj)
-		text := obj.Text.Content
-		log.Printf("%s", text)
-		cmd := exec.Command("/bin/bash", workDirPath+"/cmd.sh", text)
-		var stderr, stdout bytes.Buffer
-		cmd.Stdout = &stdout
-		cmd.Stderr = &stderr
-		err = cmd.Run()
-		if err != nil {
-			log.Println(err.Error(), stderr.String())
 		} else {
-            log.Println(stdout.String())
+			log.Printf("%v", req)
+			content, err := ioutil.ReadAll(req.Body)
+			if err != nil {
+				log.Fatal(err)
+			}
+			log.Println(string(content))
+			var obj dingtalk.RobotOutgoingMessage
+			json.Unmarshal(content, &obj)
+			text := obj.Text.Content
+			log.Printf("%s", text)
+			cmd := exec.Command("/bin/bash", workDirPath+"/cmd.sh", text)
+			var stderr, stdout bytes.Buffer
+			cmd.Stdout = &stdout
+			cmd.Stderr = &stderr
+			err = cmd.Run()
+			if err != nil {
+				log.Println(err.Error(), stderr.String())
+			} else {
+				log.Println(stdout.String())
+			}
+			io.WriteString(w, "{ \"errcode\": 0, \"errmsg\": \"ok\"}")
 		}
-		io.WriteString(w, "{ \"errcode\": 0, \"errmsg\": \"ok\"}")
 	})
 
 	// One can use generate_cert.go in crypto/tls to generate cert.pem and key.pem.
