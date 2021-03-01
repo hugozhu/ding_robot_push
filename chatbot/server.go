@@ -29,6 +29,7 @@ func main() {
 		action := req.URL.Query().Get("action")
 		if action == "ding" {
 			text := req.URL.Query().Get("text")
+			log.Println("text: ", text)
 			if text != "" {
 				text = "/echo " + text
 				exec.Command("/bin/bash", workDirPath+"/cmd.sh", text)
