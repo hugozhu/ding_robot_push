@@ -25,27 +25,36 @@ func init() {
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		log.Printf("%v", req)
-		content, err := ioutil.ReadAll(req.Body)
-		if err != nil {
-			log.Fatal(err)
-		}
-		log.Println(string(content))
-		var obj dingtalk.RobotOutgoingMessage
-		json.Unmarshal(content, &obj)
-		text := obj.Text.Content
-		log.Printf("%s", text)
-		cmd := exec.Command("/bin/bash", workDirPath+"/cmd.sh", text)
-		var stderr, stdout bytes.Buffer
-		cmd.Stdout = &stdout
-		cmd.Stderr = &stderr
-		err = cmd.Run()
-		if err != nil {
-			log.Println(err.Error(), stderr.String())
+		// log.Printf("%v", req)
+		action := req.URL.Query().Get("action")
+		if action == "ding" {
+			text := req.URL.Query().Get("text")
+			if text != "" {
+				text = "/echo " + text
+				exec.Command("/bin/bash", workDirPath+"/cmd.sh", text)
+			}
 		} else {
-			log.Println(stdout.String())
+			content, err := ioutil.ReadAll(req.Body)
+			if err != nil {
+				log.Fatal(err)
+			}
+			log.Println(string(content))
+			var obj dingtalk.RobotOutgoingMessage
+			json.Unmarshal(content, &obj)
+			text := obj.Text.Content
+			log.Printf("%s", text)
+			cmd := exec.Command("/bin/bash", workDirPath+"/cmd.sh", text)
+			var stderr, stdout bytes.Buffer
+			cmd.Stdout = &stdout
+			cmd.Stderr = &stderr
+			err = cmd.Run()
+			if err != nil {
+				log.Println(err.Error(), stderr.String())
+			} else {
+				log.Println(stdout.String())
+			}
+			io.WriteString(w, "OK")
 		}
-		io.WriteString(w, "OK")
 	})
 
 	// One can use generate_cert.go in crypto/tls to generate cert.pem and key.pem.
