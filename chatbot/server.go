@@ -31,8 +31,7 @@ func main() {
 			text := req.URL.Query().Get("text")
 			log.Println("text: ", text)
 			if text != "" {
-				text = "/echo " + text
-				exec.Command("/bin/bash", workDirPath+"/cmd.sh", text)
+				exec.Command("/bin/bash", workDirPath+"/push.sh", text).Run()
 			}
 		} else {
 			log.Printf("%v", req)
