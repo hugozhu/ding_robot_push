@@ -14,9 +14,19 @@ if [[ "$line" == /* ]]; then
         /sh:    显示市场股价 
         /cny:   显示市场汇率
         /cam:   启动取摄像头拍照
+        /pi3:   显示Pi3的基本信息
 END
 )
        push3.sh "$help"
+    fi
+
+    if [[ "pi3" == $cmd ]]; then
+        y=`ssh hugo@cn.myalert.info "sudo /home/hugo/bin/restart_vpn.sh;/sbin/ifconfig"`
+        echo $y
+        push3.sh "$y"
+        x=`ssh -t hugo@localhost -p 21000 "sudo /home/hugo/bin/connect_ppp0.sh;/sbin/ifconfig"`
+        echo $x
+        push3.sh "$x"
     fi
     
     if [[ "cam" == $cmd ]]; then
@@ -45,5 +55,19 @@ END
 
     if [[ "cny" == $cmd ]]; then
         /home/hugo/Projects/phantomjs/safe.gov.sh
+    fi
+
+    if [[ "df" == $cmd ]]; then
+        s=`df`
+        push3.sh "$s"
+    fi
+
+    if [[ "free" == $cmd ]]; then
+        s=`free`
+        push3.sh "$s"
+    fi
+    
+    if [[ "w" == $cmd ]]; then
+        push3.sh "`w`"
     fi
 fi

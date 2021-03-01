@@ -43,9 +43,9 @@ func main() {
 		if err != nil {
 			log.Println(err.Error(), stderr.String())
 		} else {
-			log.Println(stdout.String())
+            log.Println(stdout.String())
 		}
-		io.WriteString(w, "OK")
+		io.WriteString(w, "{ \"errcode\": 0, \"errmsg\": \"ok\"}")
 	})
 
 	// One can use generate_cert.go in crypto/tls to generate cert.pem and key.pem.
