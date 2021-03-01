@@ -53,7 +53,7 @@ func main() {
 			} else {
 				log.Println(stdout.String())
 			}
-			io.WriteString(w, "OK")
+			io.WriteString(w, "{ \"errcode\": 0, \"errmsg\": \"ok\"}")
 		}
 	})
 
