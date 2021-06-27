@@ -1,4 +1,4 @@
-module push
+module github.com/hugozhu/ding_robot_push
 
 go 1.13
 
