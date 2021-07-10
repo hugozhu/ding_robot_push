@@ -13,4 +13,5 @@ export timezone="Asia/Shanghai"
 ## Build binary for R2S router
 ```
 DOCKER_BUILDKIT=1 docker build --file Dockerfile --output out .
+ls -l out
 ```
