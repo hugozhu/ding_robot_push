@@ -17,6 +17,4 @@ FROM scratch
 
 COPY --from=builder /build/push /
 
-COPY /push .
-
 ENTRYPOINT ["/push"]
