@@ -28,6 +28,8 @@ func stripeMarkdown(str string) string {
 func main() {
 	c := dingtalk.NewDingTalkClient(os.Getenv("corpid"), os.Getenv("corpsecret"))
 	c.RefreshAccessToken()
+	var title string
+	var message string
 	if *img {
 		f, err := os.Open(*f)
 		defer f.Close()
@@ -40,8 +42,17 @@ func main() {
 		}
 		//log.Printf("%v %v %v", m.MediaID, *f, err)
 		markdown := "![Screenshot](" + m.MediaID + ")"
-		c.SendRobotMarkdownMessage(os.Getenv("token"), "Screenshot", markdown)
+		title = "Screenshot"
+		message = markdown
 	} else {
-		c.SendRobotMarkdownMessage(os.Getenv("token"), stripeMarkdown(os.Args[1]), os.Args[1])
+		title = stripeMarkdown(os.Args[1])
+		message = os.Args[1]
 	}
+	resp, err := c.SendRobotMarkdownMessage(os.Getenv("token"), title, message)
+
+	if err!=nil {
+		panic(err)
+	} else {
+		log.Println(resp)
+	}	
 }
