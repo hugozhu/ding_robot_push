@@ -52,7 +52,7 @@ func main() {
 			if err := stream.Send(&proto.Request{Input: "/ping"}); err != nil {
 				log.Println(err)
 			}
-			time.Sleep(time.Duration(5) * time.Second)
+			time.Sleep(time.Duration(30) * time.Second)
 		}
 	}()
 
