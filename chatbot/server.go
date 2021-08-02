@@ -93,7 +93,7 @@ func handler(w http.ResponseWriter, req *http.Request) {
 		text := req.URL.Query().Get("text")
 		err := broadCast(text)
 		if err != nil {
-			io.WriteString(w, "{ \"errcode\": 1, \"errmsg\": \", err.Error() ,\"}")
+			io.WriteString(w, "{ \"errcode\": 1, \"errmsg\": \""+err.Error()+"\"}")
 		} else {
 			io.WriteString(w, "{ \"errcode\": 0, \"errmsg\": \"ok\"}")
 		}

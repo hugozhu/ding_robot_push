@@ -24,7 +24,11 @@ func init() {
 }
 
 func main() {
-	conn, err := grpc.Dial("localhost:3000", grpc.WithInsecure())
+	url := os.Getenv("grpc_server")
+	if url == "" {
+		url = "localhost:3000"
+	}
+	conn, err := grpc.Dial(url, grpc.WithInsecure())
 	if err != nil {
 		log.Printf("Failed to connect: [%v]\n", err)
 		return
