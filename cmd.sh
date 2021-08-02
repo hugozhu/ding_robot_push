@@ -7,7 +7,8 @@ if [[ "$line" == /* ]]; then
 
     if [[ "help" == $cmd ]]; then
         help=$(cat << END
-        USAGE:
+        用法:
+
         /ip:    显示当前公网IP 
         /echo:  回显第一个单词 
         /temp:  显示树莓派CPU温度 
