@@ -30,9 +30,10 @@ var clients map[string]proto.Chat_BidStreamServer
 
 // 广播消息给所有客户端
 func broadCast(message string) error {
-	for _, client := range clients {
+	for sid, client := range clients {
 		if err := client.Send(&proto.Response{Output: message}); err != nil {
-			return err
+			log.Println("Failed to send to ", sid, ":", err)
+			delete(clients, sid)
 		}
 	}
 	return nil
